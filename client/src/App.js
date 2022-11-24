@@ -18,7 +18,9 @@ const App = () => {
   const [chemistry, setChemistry] = useState(-99999)
   const [math, setMath] = useState(-99999)
 
-  const [loading, setloading] = useState(true)
+  const [loading, setloading] = useState(true);
+  const [loadingAll, setloadingAll] = useState(true);
+  const [loadingEach, setloadingEach] = useState(true);
   const [all, setAll] = useState([])
   const [infoEach, setInfoEach] = useState([])
   const [screen, setScreen] = useState({
@@ -37,6 +39,7 @@ const App = () => {
       }).then((res) => {
         setAll(res.data)
         setloading(false);
+        setloadingAll(false)
       })
 
   }
@@ -177,7 +180,6 @@ const App = () => {
 
 
   function getInfo(x) {
-    console.log(x)
     Axios.get('http://localhost:3001/get-each-info',
       {
         params: {
@@ -189,7 +191,8 @@ const App = () => {
         }
         else {
           setInfoEach(res.data)
-          setScreen({ info: "flex", all: "none" });
+          setScreen({add:"none",view:"none",viewEach:"flex"});
+          setloadingEach(false)
         }
 
       })
@@ -203,9 +206,9 @@ const App = () => {
   function changeGet()
   {
     setScreen({add:"none",view:"flex",viewEach:"none"});
+    setloadingAll(true);
     getter();
   }
-
 
 
   return (
@@ -217,13 +220,13 @@ const App = () => {
         <div className='inner__sec2'>
           <div className='inner__left'>
             <div className='side_list'>
-              <div>
+              <div style={{fontSize:"30px",fontWeight:"800",textAlign:"center"}}>
                 MENU
               </div>
-              <div onClick={()=>{setScreen({add:"flex",view:"none",viewEach:"none"})}}>
+              <div className='side_list_div' onClick={()=>{setScreen({add:"flex",view:"none",viewEach:"none"})}}>
                 ADD USER
               </div>
-              <div onClick={()=>{changeGet()}}>
+              <div className='side_list_div' onClick={()=>{changeGet()}}>
                 VIEW ALL
               </div>
             </div>
@@ -302,10 +305,14 @@ const App = () => {
             <div className='view_profile' style={{display:screen.view}}>
 
                   {
+                    loadingAll?(
+                      <LoadingScreen/>
+                    ):
+                    (
                     all.map((ele)=>{
                       
                       return(
-                      <div className="cart-card" onClick={()=>{setScreen({add:"none",view:"none",viewEach:"flex"})}}>
+                      <div className="cart-card" onClick={()=>{getInfo(ele.rollno)}}>
                         <div className="cart-card-price" style={{width:"60px"}}>
                             {ele.rollno}
                         </div>
@@ -327,12 +334,73 @@ const App = () => {
                     </div>
                       )
                     })
+                    )
                   }
                   
             </div>
-            <div className='view_profile' style={{display:screen.viewEach}}>
-he;;p
-                  
+            <div className='view_profile' style={{display:screen.viewEach,overflowY:"hidden"}}>
+                {
+                loadingEach?(
+                  <LoadingScreen/>
+                ):
+                (
+                  <>
+                  <div className='each_name'>
+                    {infoEach.name}
+                </div>
+                <div className='inner__info__inner__top'>
+                  <div className='inner__each__info'>
+                    <div className='inner__each__info__name'>
+                      Roll No. : {infoEach.rollno}
+                    </div>
+                    <div className='inner__each__info__name' style={{fontSize:"18px"}}>
+                      Address : {infoEach.address}
+                    </div>
+                    <div className='inner__each__info__name' style={{fontSize:"18px"}}>
+                      Avg : {infoEach.avg}
+                    </div>
+                    <div className='inner__each__info__name' style={{fontSize:"18px",fontWeight:"800"}}>
+                      Grade : {infoEach.grade}
+                    </div>
+                  </div>
+                  <div className='inner__image'>
+                    <img src={img} style={{width:"100%",height:"100%",borderRadius:"50%"}}/>
+                  </div>
+                </div>
+
+                <table>
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>SOCIAL</td>
+                    <td>{infoEach.social}/100</td>
+                  </tr>
+                  <tr>
+                    <td>ENGLISH</td>
+                    <td>{infoEach.english}/100</td>
+                  </tr>
+                  <tr>
+                    <td>PHYSICS</td>
+                    <td>{infoEach.physics}/100</td>
+                  </tr>
+                  <tr>
+                    <td>CHEMISTRY</td>
+                    <td>{infoEach.chemistry}/100</td>
+                  </tr>
+                  <tr>
+                    <td>MATH</td>
+                    <td>{infoEach.math}/100</td>
+                  </tr>
+                </tbody>
+              </table>
+              </>
+                )
+              }
             </div>
           </div>
         </div>
