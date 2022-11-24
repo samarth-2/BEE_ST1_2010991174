@@ -3,11 +3,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import Axios from 'axios';
 import LoadingScreen from './loadingScreen/index';
-import img1 from "./store/face1.jpg";
-import img2 from "./store/face2.jpg";
-import img3 from "./store/face3.jpg";
-import img4 from "./store/face4.jpg";
-
+import img from './store/img.jpg'
 
 
 const App = () => {
@@ -26,8 +22,10 @@ const App = () => {
   const [all, setAll] = useState([])
   const [infoEach, setInfoEach] = useState([])
   const [screen, setScreen] = useState({
-    info: "none",
-    all: "flex"
+    add: "flex",
+    view: "none",
+    viewEach:"none"
+
   });
 
 
@@ -119,9 +117,6 @@ const App = () => {
           return;
         }
         else {
-          var imgVal = getRandomInt(4)
-          var li = [img1, img2, img3, img4]
-          var imgGo = li[imgVal];
           var avg = (social1 + english1 + chemistry1 + physics1 + math1) / 5;
           var grade = "F"
           if (avg > 90) {
@@ -158,7 +153,6 @@ const App = () => {
               math: math1,
               avg: avg,
               total: total,
-              img: imgGo,
               grade: grade
             }).then((res) => {
               if (res.data === true) {
@@ -204,6 +198,16 @@ const App = () => {
 
 
 
+  
+
+  function changeGet()
+  {
+    setScreen({add:"none",view:"flex",viewEach:"none"});
+    getter();
+  }
+
+
+
   return (
     <div className='outer'>
       <div className='inner'>
@@ -216,78 +220,119 @@ const App = () => {
               <div>
                 MENU
               </div>
-              <div>
+              <div onClick={()=>{setScreen({add:"flex",view:"none",viewEach:"none"})}}>
                 ADD USER
               </div>
-              <div>
+              <div onClick={()=>{changeGet()}}>
                 VIEW ALL
               </div>
             </div>
           </div>
           <div className='inner__right'>
-            <div className='body_left'>
+            <div className='info_page' style={{display:screen.add}}>
 
+
+              <div className='body_left'>
+
+              </div>
+              <div className="body__right" >
+                <div className="name-outer" style={{ marginTop: "1.8rem" }}>
+                  <div className="name-label">
+                    Roll No.{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
+                  </div>
+                  <input onChange={(e) => { setRoll(e.target.value) }} type="number" placeholder={"Roll No"} className="name-field" required='required' />
+                </div>
+                <div className="name-outer" style={{ marginTop: "0.5rem" }}>
+                  <div className="name-label">
+                    Name{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
+                  </div>
+                  <input onChange={(e) => { setName(e.target.value) }} type="text" placeholder={"Name"} className="name-field" required='required' />
+                </div>
+                <div className="name-outer" style={{ marginTop: "0.5rem" }}>
+                  <div className="name-label">
+                    Address{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
+                  </div>
+                  <input onChange={(e) => { setAddress(e.target.value) }} type="text" placeholder={"Address"} className="name-field" required='required' />
+                </div>
+                <div className='name-outer-outer'>
+                  <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
+                    <div className="name-label">
+                      Social{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
+                    </div>
+                    <input min="0" onChange={(e) => { setSocial(e.target.value) }} type="number" placeholder={"social/100"} className="name-field" required='required' />
+                  </div>
+                  <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
+                    <div className="name-label">
+                      English{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
+                    </div>
+                    <input min="0" onChange={(e) => { setEnglish(e.target.value) }} type="number" placeholder={"english/100"} className="name-field" required='required' />
+                  </div>
+                </div>
+                <div className='name-outer-outer'>
+                  <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
+                    <div className="name-label">
+                      Chemistry{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
+                    </div>
+                    <input min="0" onChange={(e) => { setChemistry(e.target.value) }} type="number" placeholder={"chemistry/100"} className="name-field" required='required' />
+                  </div>
+                  <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
+                    <div className="name-label">
+                      Physics{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
+                    </div>
+                    <input min="0" onChange={(e) => { setPhysics(e.target.value) }} type="number" placeholder={"physics/100"} className="name-field" required='required' />
+                  </div>
+                </div>
+                <div className='name-outer-outer'>
+                  <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
+                    <div className="name-label">
+                      Maths{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
+                    </div>
+                    <input min="0" onChange={(e) => { setMath(e.target.value) }} type="number" placeholder={"maths/100"} className="name-field" required='required' />
+                  </div>
+                </div>
+                <div className='name-outer-outer'>
+                  <div className='button' onClick={() => { submit_clicked() }}>
+                    SUBMIT
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="body__right">
-              <div className="name-outer" style={{ marginTop: "1.8rem" }}>
-                <div className="name-label">
-                  Roll No.{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
-                </div>
-                <input onChange={(e) => { setRoll(e.target.value) }} type="number" placeholder={"Roll No"} className="name-field" required='required' />
-              </div>
-              <div className="name-outer" style={{ marginTop: "0.5rem" }}>
-                <div className="name-label">
-                  Name{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
-                </div>
-                <input onChange={(e) => { setName(e.target.value) }} type="text" placeholder={"Name"} className="name-field" required='required' />
-              </div>
-              <div className="name-outer" style={{ marginTop: "0.5rem" }}>
-                <div className="name-label">
-                  Address{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
-                </div>
-                <input onChange={(e) => { setAddress(e.target.value) }} type="text" placeholder={"Address"} className="name-field" required='required' />
-              </div>
-              <div className='name-outer-outer'>
-                <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
-                  <div className="name-label">
-                    Social{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
-                  </div>
-                  <input min="0" onChange={(e) => { setSocial(e.target.value) }} type="number" placeholder={"social/100"} className="name-field" required='required' />
-                </div>
-                <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
-                  <div className="name-label">
-                    English{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
-                  </div>
-                  <input min="0" onChange={(e) => { setEnglish(e.target.value) }} type="number" placeholder={"english/100"} className="name-field" required='required' />
-                </div>
-              </div>
-              <div className='name-outer-outer'>
-                <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
-                  <div className="name-label">
-                    Chemistry{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
-                  </div>
-                  <input min="0" onChange={(e) => { setChemistry(e.target.value) }} type="number" placeholder={"chemistry/100"} className="name-field" required='required' />
-                </div>
-                <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
-                  <div className="name-label">
-                    Physics{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
-                  </div>
-                  <input min="0" onChange={(e) => { setPhysics(e.target.value) }} type="number" placeholder={"physics/100"} className="name-field" required='required' />
-                </div>
-              </div>
-              <div className='name-outer-outer'>
-                <div className="name-outer2" style={{ marginTop: "0.5rem" }}>
-                  <div className="name-label">
-                    Maths{'\u00A0'}<i style={{ color: "#EF4B4D", width: "10px", height: "10px" }} class="far fa-address-book"></i>
-                  </div>
-                  <input min="0" onChange={(e) => { setMath(e.target.value) }} type="number" placeholder={"maths/100"} className="name-field" required='required' />
-                </div>
-              </div>
-              <div className='name-outer-outer'>
-                <div className='button' onClick={() => { submit_clicked() }}>
-                  SUBMIT
-                </div>
-              </div>
+
+
+            <div className='view_profile' style={{display:screen.view}}>
+
+                  {
+                    all.map((ele)=>{
+                      
+                      return(
+                      <div className="cart-card" onClick={()=>{setScreen({add:"none",view:"none",viewEach:"flex"})}}>
+                        <div className="cart-card-price" style={{width:"60px"}}>
+                            {ele.rollno}
+                        </div>
+                        <div className="cart-card-image-out">
+                            <img src={img} className="cart-card-image" alt=""/>
+                        </div>
+                        <div className="cart-card-title">
+                        {ele.name}
+                        </div>
+                        <div className="cart-card-price">
+                            Avg:{ele.avg}
+                        </div>
+                        <div className="cart-card-price">
+                            Total:{ele.total}
+                        </div>
+                        <div className="cart-card-reviews">
+                            Grade:{ele.grade}
+                        </div>
+                    </div>
+                      )
+                    })
+                  }
+                  
+            </div>
+            <div className='view_profile' style={{display:screen.viewEach}}>
+he;;p
+                  
             </div>
           </div>
         </div>
